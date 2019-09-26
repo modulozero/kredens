@@ -13,23 +13,41 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import cookieParser from "cookie-parser";
 import express from "express";
 import pinoExpress from "express-pino-logger";
+import helmet from "helmet";
+import createHttpError from "http-errors";
 import { db } from "./db";
 import { server as graphqlServer } from "./graphql";
 import logger from "./logger";
+import authRouter from "./routes/auth";
+import indexRouter from "./routes/index";
 
 async function main() {
-  await db.migrations.create();
-  await db.migrations.apply();
+  await db.tx(async t => {
+    await t.migrations.create();
+    await t.migrations.apply();
+  });
 
   const server = graphqlServer();
   const app = express();
   const expressPino = pinoExpress({ logger });
+  app.use(helmet());
   app.use(expressPino);
-  server.applyMiddleware({ app, path: "/graphql" });
-  const port = 3000;
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cookieParser());
 
+  app.use("/", indexRouter);
+  app.use("/auth/", authRouter);
+  server.applyMiddleware({ app, path: "/graphql" });
+
+  app.use((req, res, next) => {
+    next(createHttpError(404));
+  });
+
+  const port = 3000;
   app.listen(port, () =>
     logger.info("Example app listening", {
       uri: `http://localhost:${port}${server.graphqlPath}`

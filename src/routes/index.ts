@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { MigrationRepository } from "./migrations";
-import { UserRepository } from "./users";
+import express from "express";
 
-export interface Extensions {
-  migrations: MigrationRepository;
-  users: UserRepository;
-}
+const router = express.Router();
 
-export { MigrationRepository, UserRepository };
+router.get("/", (req, res, next) => {
+  res.send("Hello, world!");
+});
+
+export default router;

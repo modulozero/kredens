@@ -14,13 +14,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pgPromise, { IDatabase, IInitOptions } from "pg-promise";
-import { Extensions, MigrationRepository } from "./repos";
+import { Extensions, MigrationRepository, UserRepository } from "./repos";
 
 type ExtendedProtocol = IDatabase<Extensions> & Extensions;
 
 const initOptions: IInitOptions<Extensions> = {
   extend(obj: ExtendedProtocol, dc: any) {
     obj.migrations = new MigrationRepository(obj, pgp);
+    obj.users = new UserRepository(obj, pgp);
   }
 };
 

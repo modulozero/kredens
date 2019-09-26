@@ -1,0 +1,1 @@
+INSERT INTO users (email, encrypted_password) VALUES ($1, $2) RETURNING id

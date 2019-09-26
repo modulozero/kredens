@@ -33,7 +33,12 @@ const migrations = {
   }))
 };
 
-export { migrations };
+const users = {
+  create: sql("users/create.sql"),
+  login: sql("users/login.sql")
+};
+
+export { migrations, users };
 
 /** Helper for linking to external query files */
 function sql(file: string): QueryFile {
