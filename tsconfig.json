@@ -6,6 +6,11 @@
     "outDir": "./dist",
     "moduleResolution": "node",
     "baseUrl": "./src",
+    "paths": {
+      "@kredens/*": [
+        "*"
+      ]
+    },
     "esModuleInterop": true
   },
   "include": [

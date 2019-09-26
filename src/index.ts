@@ -13,16 +13,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import { server as graphqlServer } from "@kredens/api";
+import { db } from "@kredens/db";
+import logger from "@kredens/logger";
+import authRouter from "@kredens/routes/auth";
+import indexRouter from "@kredens/routes/index";
 import cookieParser from "cookie-parser";
 import express from "express";
 import pinoExpress from "express-pino-logger";
 import helmet from "helmet";
 import createHttpError from "http-errors";
-import { db } from "./db";
-import { server as graphqlServer } from "./graphql";
-import logger from "./logger";
-import authRouter from "./routes/auth";
-import indexRouter from "./routes/index";
 
 async function main() {
   await db.tx(async t => {

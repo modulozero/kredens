@@ -13,8 +13,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import {
+  Extensions,
+  MigrationRepository,
+  UserRepository
+} from "@kredens/db/repos";
 import pgPromise, { IDatabase, IInitOptions } from "pg-promise";
-import { Extensions, MigrationRepository, UserRepository } from "./repos";
 
 type ExtendedProtocol = IDatabase<Extensions> & Extensions;
 

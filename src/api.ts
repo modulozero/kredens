@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import { db } from "@kredens/db";
 import { ApolloServer, gql } from "apollo-server-express";
 import { Kind } from "graphql/language";
 import { GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql/type";
 import { DateTime } from "luxon";
-
-import { db } from "./db";
 
 const typeDefs = gql`
   type Query {

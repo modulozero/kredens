@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "dev": "ts-node-dev -r dotenv/config --respawn --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only ./src/index.ts",
     "prod": "tsc && node ./dist/index.js",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
@@ -43,6 +43,7 @@
     "@types/pino": "^5.8.10",
     "pino-pretty": "^3.2.1",
     "ts-node-dev": "^1.0.0-pre.43",
+    "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.3"
