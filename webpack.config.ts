@@ -1,4 +1,5 @@
 import path from "path";
+import VueLoaderPlugin from "vue-loader/lib/plugin"; // tslint:disable-line:no-implicit-dependencies
 import webpack from "webpack"; // tslint:disable-line:no-implicit-dependencies
 
 const config: webpack.Configuration = {
@@ -9,8 +10,13 @@ const config: webpack.Configuration = {
     rules: [
       {
         exclude: /node_modules/,
-        test: /\.tsx?$/,
-        use: "ts-loader"
+        loader: "ts-loader",
+        options: { appendTsSuffixTo: [/\.vue$/] },
+        test: /\.ts?$/
+      },
+      {
+        loader: "vue-loader",
+        test: /.vue$/
       }
     ]
   },
@@ -19,8 +25,9 @@ const config: webpack.Configuration = {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/assets/"
   },
+  plugins: [new VueLoaderPlugin()],
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".ts", ".js"]
   }
 };
 

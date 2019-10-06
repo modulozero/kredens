@@ -1,13 +1,16 @@
 {
     "defaultSeverity": "error",
-    "extends": [
-        "tslint:latest",
-        "tslint-config-prettier"
-    ],
+    "extends": ["tslint:latest", "tslint-config-prettier"],
     "jsRules": {},
     "rules": {
-        "interface-name": [ true, "never-prefix"],
-        "no-submodule-imports": [true, "graphql/language", "graphql/type", "@kredens"],
+        "interface-name": [true, "never-prefix"],
+        "no-submodule-imports": [
+            true,
+            "graphql/language",
+            "graphql/type",
+            "vue-loader/lib/plugin",
+            "@kredens"
+        ],
         "no-implicit-dependencies": [true, ["@kredens"]]
     },
     "rulesDirectory": []

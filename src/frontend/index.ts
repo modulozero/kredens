@@ -1,3 +1,16 @@
-import { noise } from "./noise";
+import Vue from "vue";
+import App from "./App.vue";
 
-window.onload = noise;
+export const app = new Vue({
+  components: {
+    App
+  },
+  el: "#body",
+  render(createElement) {
+    return createElement(App, {
+      props: {
+        message: "blab"
+      }
+    });
+  }
+});
