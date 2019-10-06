@@ -37,6 +37,20 @@ async function main() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+  if (app.settings.env === "development") {
+    const webpack = require("webpack"); // tslint:disable-line:no-implicit-dependencies
+    const webpackDevMiddleware = require("webpack-dev-middleware"); // tslint:disable-line:no-implicit-dependencies
+    const config = require("../webpack.config").default;
+
+    const compiler = webpack(config);
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: "/assets/"
+      })
+    );
+  }
+
   app.set("view engine", "pug");
 
   app.use("/", indexRouter);
