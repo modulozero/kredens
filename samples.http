@@ -10,11 +10,11 @@ Content-type: application/json
 
 ###
 
-GET {{ baseUrl }}/auth/bootstrap HTTP/1.1
+GET {{ baseUrl }}/bootstrap HTTP/1.1
 
 ###
 
-POST {{ baseUrl }}/auth/bootstrap HTTP/1.1
+POST {{ baseUrl }}/bootstrap HTTP/1.1
 Content-Type: application/json
 
 {

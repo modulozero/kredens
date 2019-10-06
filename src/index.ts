@@ -17,9 +17,12 @@ import { server as graphqlServer } from "@kredens/api";
 import { db } from "@kredens/db";
 import logger from "@kredens/logger";
 import indexRouter from "@kredens/routes/";
+import bootstrapRouter from "@kredens/routes/bootstrap";
 import cookieParser from "cookie-parser";
+import csrf from "csurf";
 import express from "express";
 import pinoExpress from "express-pino-logger";
+import session, { SessionOptions } from "express-session";
 import helmet from "helmet";
 import createHttpError from "http-errors";
 
@@ -37,6 +40,19 @@ async function main() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+  const sessionOptions: SessionOptions = {
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.SECRET
+  };
+
+  if (app.get("env") === "production") {
+    app.set("trust proxy", 1);
+    sessionOptions.cookie.secure = true;
+  }
+  app.use(session(sessionOptions));
+  app.use("/bootstrap", bootstrapRouter);
+  app.use(csrf());
 
   if (app.settings.env === "development") {
     const webpack = require("webpack"); // tslint:disable-line:no-implicit-dependencies
