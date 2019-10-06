@@ -16,8 +16,7 @@
 import { server as graphqlServer } from "@kredens/api";
 import { db } from "@kredens/db";
 import logger from "@kredens/logger";
-import authRouter from "@kredens/routes/auth";
-import indexRouter from "@kredens/routes/index";
+import indexRouter from "@kredens/routes/";
 import cookieParser from "cookie-parser";
 import express from "express";
 import pinoExpress from "express-pino-logger";
@@ -38,9 +37,9 @@ async function main() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+  app.set("view engine", "pug");
 
   app.use("/", indexRouter);
-  app.use("/auth/", authRouter);
   server.applyMiddleware({ app, path: "/graphql" });
 
   app.use((req, res, next) => {

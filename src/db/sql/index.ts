@@ -18,6 +18,8 @@ import { Maybe, None, Some } from "monet";
 import path from "path";
 import { QueryFile } from "pg-promise";
 
+const sqlDir = path.join(process.cwd(), "sql");
+
 const migrations = {
   applied: sql("migrations/applied.sql"),
   apply: sql("migrations/apply.sql"),
@@ -42,13 +44,13 @@ export { migrations, users };
 
 /** Helper for linking to external query files */
 function sql(file: string): QueryFile {
-  const fullPath = path.join(__dirname, file);
+  const fullPath = path.join(sqlDir, file);
 
   return new QueryFile(fullPath, { minify: true });
 }
 
 function ifExists(file: string): Maybe<string> {
-  const fullPath = path.join(__dirname, file);
+  const fullPath = path.join(sqlDir, file);
   if (existsSync(fullPath)) {
     return Some(file);
   } else {
@@ -57,7 +59,7 @@ function ifExists(file: string): Maybe<string> {
 }
 
 function subdirs(dir: string): string[] {
-  const fullPath = path.join(__dirname, dir);
+  const fullPath = path.join(sqlDir, dir);
   return readdirSync(fullPath, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory)
     .map(dirent => dirent.name)

@@ -6,14 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev -r dotenv/config --watch src/**/*.sql -r tsconfig-paths/register --respawn --transpile-only ./src/index.ts",
     "prod": "tsc && node ./dist/index.js",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "keywords": [],
   "author": "ModZero <modzero@modzero.xyz>",
   "license": "AGPL-3.0-or-later",
+  "private": true,
   "dependencies": {
+    "@types/pug": "^2.0.4",
     "apollo-server-express": "^2.9.3",
     "argon2": "^0.24.1",
     "cookie-parser": "^1.4.4",
@@ -28,6 +30,7 @@
     "monet": "^0.9.0",
     "pg-promise": "^9.2.1",
     "pino": "^5.13.3",
+    "pug": "^2.0.4",
     "tweetnacl": "^1.0.1",
     "tweetnacl-util": "^0.15.0"
   },
