@@ -17,6 +17,7 @@ import { users as sql } from "@kredens/db/sql";
 import argon2 from "argon2";
 import { Maybe, None, Some } from "monet";
 import { IDatabase, IMain } from "pg-promise";
+import { User } from "@kredens/db/models";
 
 export class UserRepository {
   private db: IDatabase<any>;
@@ -46,5 +47,13 @@ export class UserRepository {
     return this.db
       .one(sql.create, [email, encryptedPassword])
       .then((user: { id: number }) => +user.id);
+  }
+
+  public async details(id: number): Promise<Maybe<User>> {
+    return this.db
+      .oneOrNone(sql.details, [id])
+      .then((user: { email: string }) =>
+        user !== null ? Some({ ...user, id }) : None()
+      );
   }
 }

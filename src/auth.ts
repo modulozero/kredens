@@ -14,22 +14,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { db } from "@kredens/db";
+import { User } from "@kredens/db/models";
 import express from "express";
+import { None } from "monet";
 
-const router = express.Router();
+export const getUser = async (req: express.Request) =>
+  req.session.userID ? db.users.details(req.session.userID) : None<User>();
 
-router.get("/", async (req, res, next) => {
-  res.render("login");
-});
+export const authMiddleware: () => express.Handler = () => async (
+  req,
+  res,
+  next
+) => {
+  if (req.session.userID) {
+    const user = await getUser(req);
 
-router.post("/", async (req, res, next) => {
-  const userID = await db.users.login(req.body.email, req.body.password);
-  if (userID.isSome()) {
-    req.session.userID = userID.some();
-    res.redirect("/");
-  } else {
-    res.redirect("/auth/");
+    if (user.isSome()) {
+      req.user = user.some();
+    } else {
+      delete req.session.userID;
+    }
   }
-});
 
-export default router;
+  next();
+};

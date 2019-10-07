@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { server as graphqlServer } from "@kredens/api";
+import { authMiddleware } from "@kredens/auth";
 import { db } from "@kredens/db";
 import logger from "@kredens/logger";
 import indexRouter from "@kredens/routes/";
@@ -25,18 +26,33 @@ import pinoExpress from "express-pino-logger";
 import session, { SessionOptions } from "express-session";
 import helmet from "helmet";
 import createHttpError from "http-errors";
-
 async function main() {
   await db.tx(async t => {
     await t.migrations.create();
     await t.migrations.apply();
   });
 
-  const server = graphqlServer();
   const app = express();
   const expressPino = pinoExpress({ logger });
   app.use(helmet());
   app.use(expressPino);
+
+  if (app.settings.env === "development") {
+    const webpack = await import("webpack").then(p => p.default); // tslint:disable-line:no-implicit-dependencies
+    // tslint:disable-next-line:no-implicit-dependencies
+    const webpackDevMiddleware = await import("webpack-dev-middleware").then(
+      p => p.default
+    );
+    const config = await import("../webpack.config").then(p => p.default);
+
+    const compiler = webpack(config);
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: "/assets/"
+      })
+    );
+  }
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
@@ -52,25 +68,26 @@ async function main() {
   }
   app.use(session(sessionOptions));
   app.use("/bootstrap", bootstrapRouter);
+
+  app.use(authMiddleware());
+  const apiServer = graphqlServer();
+  apiServer.applyMiddleware({
+    app,
+    path: "/graphql"
+  });
+
   app.use(csrf());
-
-  if (app.settings.env === "development") {
-    const webpack = require("webpack"); // tslint:disable-line:no-implicit-dependencies
-    const webpackDevMiddleware = require("webpack-dev-middleware"); // tslint:disable-line:no-implicit-dependencies
-    const config = require("../webpack.config").default;
-
-    const compiler = webpack(config);
-    app.use(
-      webpackDevMiddleware(compiler, {
-        publicPath: "/assets/"
-      })
-    );
-  }
 
   app.set("view engine", "pug");
 
+  app.use(async (req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    res.locals.user = req.user;
+
+    next();
+  });
+
   app.use("/", indexRouter);
-  server.applyMiddleware({ app, path: "/graphql" });
 
   app.use((req, res, next) => {
     next(createHttpError(404));
@@ -79,7 +96,7 @@ async function main() {
   const port = 3000;
   app.listen(port, () =>
     logger.info("Example app listening", {
-      uri: `http://localhost:${port}${server.graphqlPath}`
+      uri: `http://localhost:${port}${apiServer.graphqlPath}`
     })
   );
 }

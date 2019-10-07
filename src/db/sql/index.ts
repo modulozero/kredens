@@ -37,6 +37,7 @@ const migrations = {
 
 const users = {
   create: sql("users/create.sql"),
+  details: sql("users/details.sql"),
   login: sql("users/login.sql")
 };
 

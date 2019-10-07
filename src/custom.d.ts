@@ -13,23 +13,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { db } from "@kredens/db";
-import express from "express";
+import { User } from "@kredens/db/models";
 
-const router = express.Router();
-
-router.get("/", async (req, res, next) => {
-  res.render("login");
-});
-
-router.post("/", async (req, res, next) => {
-  const userID = await db.users.login(req.body.email, req.body.password);
-  if (userID.isSome()) {
-    req.session.userID = userID.some();
-    res.redirect("/");
-  } else {
-    res.redirect("/auth/");
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
   }
-});
-
-export default router;
+}

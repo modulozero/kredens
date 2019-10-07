@@ -1,8 +1,15 @@
-html
-  head
-    title= title
-  body
-    h1= message
-    div#body
-      p I am a placeholder
-    script(src="/assets/main.bundle.js")
+extends layout.pug
+
+block content
+  if user
+    p.auth Hi, #{ user.email }
+  else
+    p.auth 
+      | Who are you?
+      |
+      a(href="/auth") Login you coward.
+  div#body
+    p I am a placeholder
+
+block scripts
+  script(src="/assets/main.bundle.js")

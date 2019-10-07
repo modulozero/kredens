@@ -18,7 +18,7 @@ import {
   MigrationRepository,
   UserRepository
 } from "@kredens/db/repos";
-import monitor from "pg-monitor";
+
 import pgPromise, { IDatabase, IInitOptions } from "pg-promise";
 
 type ExtendedProtocol = IDatabase<Extensions> & Extensions;
@@ -31,6 +31,11 @@ const initOptions: IInitOptions<Extensions> = {
 };
 
 const pgp: pgPromise.IMain = pgPromise(initOptions);
-monitor.attach(initOptions);
+
+if (process.env.NODE_ENV !== "production") {
+  // tslint:disable-next-line:no-implicit-dependencies
+  import("pg-monitor").then(monitor => monitor.attach(initOptions));
+}
+
 const db: ExtendedProtocol = pgp(process.env.PG_CONNECTION_STRING);
 export { db, pgp };

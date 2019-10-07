@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { db } from "@kredens/db";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer, AuthenticationError, gql } from "apollo-server-express";
 import { Kind } from "graphql/language";
 import { GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql/type";
 import { DateTime } from "luxon";
@@ -67,6 +67,17 @@ const resolvers = {
 
 export function server() {
   return new ApolloServer({
+    context: async req => {
+      const user = req.req.user;
+
+      if (!user) {
+        throw new AuthenticationError("you must be logged in");
+      }
+
+      return {
+        user
+      };
+    },
     resolvers,
     typeDefs
   });

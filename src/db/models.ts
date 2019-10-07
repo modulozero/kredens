@@ -20,3 +20,8 @@ export interface Migration {
   name: string;
   applied_at: DateTime;
 }
+
+export interface User {
+  id: number;
+  email: string;
+}
