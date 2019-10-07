@@ -16,6 +16,7 @@
 import { db } from "@kredens/db";
 import { User } from "@kredens/db/models";
 import express from "express";
+import createHttpError from "http-errors";
 import { None } from "monet";
 
 export const getUser = async (req: express.Request) =>
@@ -34,6 +35,14 @@ export const authMiddleware: () => express.Handler = () => async (
     } else {
       delete req.session.userID;
     }
+  }
+
+  next();
+};
+
+export const requireAuthMiddleware: express.Handler = (req, res, next) => {
+  if (!req.user) {
+    next(createHttpError(401));
   }
 
   next();
