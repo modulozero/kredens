@@ -13,14 +13,20 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { MigrationRepository } from "@kredens/db/repos/migrations";
-import { TaskRepository } from "@kredens/db/repos/tasks";
-import { UserRepository } from "@kredens/db/repos/users";
+import { ScheduleType, Task } from "@kredens/db/models";
+import { tasks as sql } from "@kredens/db/sql";
+import { IDatabase, IMain } from "pg-promise";
 
-export interface Extensions {
-  migrations: MigrationRepository;
-  users: UserRepository;
-  tasks: TaskRepository;
+export class TaskRepository {
+  private db: IDatabase<any>;
+
+  constructor(db: IDatabase<any>, pgp: IMain) {
+    this.db = db;
+  }
+
+  public async list(owner: number): Promise<Task[]> {
+    return this.db
+      .manyOrNone<Task>(sql.list, [owner, 10, 0])
+      .then(rows => (rows ? rows : []));
+  }
 }
-
-export { MigrationRepository, UserRepository, TaskRepository };

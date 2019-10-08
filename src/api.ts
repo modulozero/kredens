@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { db } from "@kredens/db";
+import { User } from "@kredens/db/models";
 import { ApolloServer, AuthenticationError, gql } from "apollo-server-express";
 import { Kind } from "graphql/language";
 import { GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql/type";
@@ -24,15 +25,40 @@ const typeDefs = gql`
     "A simple type for getting started"
     hello: String
     migrations: [Migration]!
+    user(id: ID): User
   }
 
   type Migration {
-    id: ID
+    id: ID!
     name: String!
     applied_at: DateTime!
   }
 
+  type User {
+    id: ID!
+    email: String!
+    tasks: [Task]!
+  }
+
+  type Task {
+    id: ID
+    name: String!
+    notes: String
+    schedule: ScheduleType!
+    min_frequency: Int
+    max_frequency: Int
+    created_at: DateTime!
+  }
+
   scalar DateTime
+
+  enum ScheduleType {
+    ONCE
+    DAILY
+    WEEKLY
+    MONTHLY
+    YEARLY
+  }
 `;
 
 const dateTimeConfig: GraphQLScalarTypeConfig<DateTime, string> = {
@@ -56,12 +82,29 @@ const dateTimeConfig: GraphQLScalarTypeConfig<DateTime, string> = {
 const resolvers = {
   DateTime: new GraphQLScalarType(dateTimeConfig),
   Query: {
-    hello: async () => {
-      return `Hello, world!`;
-    },
-    migrations: async () => {
-      return db.migrations.applied();
+    hello: () => `Hello, world!`,
+    migrations: () => db.migrations.applied(),
+    user: async (
+      parent: any,
+      { id }: { id: string },
+      context: { user?: User }
+    ) => {
+      if (!context.user || context.user.id !== +id) {
+        throw new AuthenticationError(
+          "You cannot query users other than yourself"
+        );
+      }
+      return db.users.details(+id).then(user => user.orNull());
     }
+  },
+  User: {
+    tasks: (user: User) =>
+      db.tasks.list(user.id).then(tasks =>
+        tasks.map(t => ({
+          ...t,
+          schedule: t.schedule.toUpperCase()
+        }))
+      )
   }
 };
 

@@ -16,16 +16,23 @@
 import {
   Extensions,
   MigrationRepository,
+  TaskRepository,
   UserRepository
 } from "@kredens/db/repos";
-
+import { DateTime } from "luxon";
+import pg from "pg";
 import pgPromise, { IDatabase, IInitOptions } from "pg-promise";
+
+const types = pg.types;
+types.setTypeParser(types.builtins.TIMESTAMPTZ, DateTime.fromSQL);
+types.setTypeParser(types.builtins.TIMESTAMP, DateTime.fromSQL);
 
 type ExtendedProtocol = IDatabase<Extensions> & Extensions;
 
 const initOptions: IInitOptions<Extensions> = {
   extend(obj: ExtendedProtocol, dc: any) {
     obj.migrations = new MigrationRepository(obj, pgp);
+    obj.tasks = new TaskRepository(obj, pgp);
     obj.users = new UserRepository(obj, pgp);
   }
 };

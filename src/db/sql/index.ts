@@ -41,7 +41,11 @@ const users = {
   login: sql("users/login.sql")
 };
 
-export { migrations, users };
+const tasks = {
+  list: sql("tasks/list.sql")
+};
+
+export { migrations, users, tasks };
 
 /** Helper for linking to external query files */
 function sql(file: string): QueryFile {

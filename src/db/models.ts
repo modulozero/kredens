@@ -25,3 +25,16 @@ export interface User {
   id: number;
   email: string;
 }
+
+export type ScheduleType = "once" | "daily" | "weekly" | "monthly" | "yearly";
+
+export interface Task {
+  id: number;
+  owner: number;
+  name: string;
+  notes?: string;
+  schedule: ScheduleType;
+  min_frequency?: number;
+  max_frequency?: number;
+  created_at: DateTime;
+}

@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import { User } from "@kredens/db/models";
 import { users as sql } from "@kredens/db/sql";
 import argon2 from "argon2";
 import { Maybe, None, Some } from "monet";
 import { IDatabase, IMain } from "pg-promise";
-import { User } from "@kredens/db/models";
 
 export class UserRepository {
   private db: IDatabase<any>;
