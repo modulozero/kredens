@@ -1,0 +1,1 @@
+UPDATE "sessions" SET "expires_at"=$2 WHERE "sid"=$1;

@@ -45,7 +45,17 @@ const tasks = {
   list: sql("tasks/list.sql")
 };
 
-export { migrations, users, tasks };
+const sessions = {
+  all: sql("sessions/all.sql"),
+  clear: sql("sessions/clear.sql"),
+  destroy: sql("sessions/destroy.sql"),
+  get: sql("sessions/get.sql"),
+  length: sql("sessions/length.sql"),
+  set: sql("sessions/set.sql"),
+  touch: sql("sessions/touch.sql")
+};
+
+export { migrations, users, tasks, sessions };
 
 /** Helper for linking to external query files */
 function sql(file: string): QueryFile {

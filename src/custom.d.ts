@@ -14,11 +14,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { User } from "@kredens/db/models";
+import { Cookie } from "@holdyourwaffle/express-session";
 
 declare global {
   namespace Express {
     interface Request {
       user?: User;
     }
+  }
+
+  interface SessionData {
+    cookie: Cookie;
+    userID?: number;
+    csrfToken: string;
   }
 }

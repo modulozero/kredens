@@ -13,19 +13,21 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import session, { SessionOptions } from "@holdyourwaffle/express-session";
 import { server as graphqlServer } from "@kredens/api";
 import { authMiddleware } from "@kredens/auth";
 import { db } from "@kredens/db";
 import logger from "@kredens/logger";
 import indexRouter from "@kredens/routes/";
 import bootstrapRouter from "@kredens/routes/bootstrap";
+import { PgStore } from "@kredens/sessions";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
 import express from "express";
 import pinoExpress from "express-pino-logger";
-import session, { SessionOptions } from "express-session";
 import helmet from "helmet";
 import createHttpError from "http-errors";
+
 async function main() {
   await db.tx(async t => {
     await t.migrations.create();
@@ -59,7 +61,8 @@ async function main() {
   const sessionOptions: SessionOptions = {
     resave: false,
     saveUninitialized: false,
-    secret: process.env.SECRET
+    secret: process.env.SECRET,
+    store: new PgStore()
   };
 
   if (app.get("env") === "production") {

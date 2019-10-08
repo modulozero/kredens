@@ -14,13 +14,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { MigrationRepository } from "@kredens/db/repos/migrations";
+import { SessionRepository } from "@kredens/db/repos/sessions";
 import { TaskRepository } from "@kredens/db/repos/tasks";
 import { UserRepository } from "@kredens/db/repos/users";
 
 export interface Extensions {
   migrations: MigrationRepository;
-  users: UserRepository;
+  sessions: SessionRepository;
   tasks: TaskRepository;
+  users: UserRepository;
 }
 
-export { MigrationRepository, UserRepository, TaskRepository };
+export {
+  MigrationRepository,
+  UserRepository,
+  SessionRepository,
+  TaskRepository
+};

@@ -16,6 +16,7 @@
 import {
   Extensions,
   MigrationRepository,
+  SessionRepository,
   TaskRepository,
   UserRepository
 } from "@kredens/db/repos";
@@ -34,6 +35,7 @@ const initOptions: IInitOptions<Extensions> = {
     obj.migrations = new MigrationRepository(obj, pgp);
     obj.tasks = new TaskRepository(obj, pgp);
     obj.users = new UserRepository(obj, pgp);
+    obj.sessions = new SessionRepository(obj, pgp);
   }
 };
 

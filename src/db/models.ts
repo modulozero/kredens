@@ -38,3 +38,8 @@ export interface Task {
   max_frequency?: number;
   created_at: DateTime;
 }
+
+export interface Session {
+  sid: string;
+  session: SessionData;
+}

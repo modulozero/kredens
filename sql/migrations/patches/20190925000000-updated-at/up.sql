@@ -1,11 +1,7 @@
 CREATE OR REPLACE FUNCTION set_updated_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-   IF row(NEW.*) IS DISTINCT FROM row(OLD.*) THEN
-      NEW.updated_at = now(); 
-      RETURN NEW;
-   ELSE
-      RETURN OLD;
-   END IF;
+    NEW.updated_at = now(); 
+    RETURN NEW;
 END;
 $$ language 'plpgsql';

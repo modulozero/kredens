@@ -1,0 +1,1 @@
+SELECT "session" FROM "sessions" WHERE "sid"=$1 AND CURRENT_TIMESTAMP < "expires_at";
