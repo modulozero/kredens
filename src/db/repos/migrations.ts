@@ -48,12 +48,10 @@ export class MigrationRepository {
   }
 
   public async applied(): Promise<Migration[]> {
-    return this.db.map<Migration>(sql.applied, [], row => {
-      return {
-        applied_at: row.applied_at as DateTime,
-        id: +row.id,
-        name: row.name
-      };
-    });
+    return this.db.map(sql.applied, [], row => ({
+      appliedAt: row.applied_at as DateTime,
+      id: +row.id,
+      name: row.name
+    }));
   }
 }

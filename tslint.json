@@ -11,7 +11,8 @@
             "vue-loader/lib/plugin",
             "@kredens"
         ],
-        "no-implicit-dependencies": [true, ["@kredens"]]
+        "no-implicit-dependencies": [true, ["@kredens"]],
+        "object-literal-sort-keys": [true, "match-declaration-order-only", "shorthand-first"]
     },
     "rulesDirectory": []
 }

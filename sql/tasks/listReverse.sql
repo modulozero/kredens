@@ -10,5 +10,5 @@ FROM
     tasks
 WHERE
     owner = $1 AND ($2 IS NULL OR id > $2) AND ($3 IS NULL OR id < $3)
-ORDER BY created_at ASC
+ORDER BY created_at DESC
 LIMIT $4;

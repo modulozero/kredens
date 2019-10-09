@@ -42,7 +42,11 @@ const users = {
 };
 
 const tasks = {
-  list: sql("tasks/list.sql")
+  count: sql("tasks/count.sql"),
+  hasNext: sql("tasks/hasNext.sql"),
+  hasPrev: sql("tasks/hasPrev.sql"),
+  list: sql("tasks/list.sql"),
+  listReverse: sql("tasks/listReverse.sql")
 };
 
 const sessions = {

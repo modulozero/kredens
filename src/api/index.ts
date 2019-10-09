@@ -13,39 +13,24 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { DateTime } from "luxon";
+import resolvers from "@kredens/api/resolvers";
+import typeDefs from "@kredens/api/typeDefs";
+import { ApolloServer, AuthenticationError } from "apollo-server-express";
 
-export interface Migration {
-  id: number;
-  name: string;
-  appliedAt: DateTime;
-}
+export function server() {
+  return new ApolloServer({
+    context: async req => {
+      const user = req.req.user;
 
-export interface User {
-  id: number;
-  email: string;
-}
+      if (!user) {
+        throw new AuthenticationError("you must be logged in");
+      }
 
-export enum ScheduleType {
-  Once = "once",
-  Daily = "daily",
-  Weekly = "weekly",
-  Monthly = "monthly",
-  Yearly = "yearly"
-}
-
-export interface Task {
-  id: number;
-  owner: number;
-  name: string;
-  notes?: string;
-  schedule: ScheduleType;
-  minFrequency?: number;
-  maxFrequency?: number;
-  createdAt: DateTime;
-}
-
-export interface Session {
-  sid: string;
-  session: SessionData;
+      return {
+        user
+      };
+    },
+    resolvers,
+    typeDefs
+  });
 }

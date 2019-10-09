@@ -1,0 +1,1 @@
+SELECT COUNT(*) > 0 r FROM "tasks" WHERE owner = $1 AND "id" < $2;

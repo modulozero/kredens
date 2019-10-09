@@ -1,0 +1,1 @@
+SELECT count(*) c FROM "tasks" WHERE owner = $1;

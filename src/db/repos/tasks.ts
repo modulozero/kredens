@@ -17,6 +17,19 @@ import { ScheduleType, Task } from "@kredens/db/models";
 import { tasks as sql } from "@kredens/db/sql";
 import { IDatabase, IMain } from "pg-promise";
 
+function rowToTask(row: any): Task {
+  return {
+    createdAt: row.created_at,
+    id: +row.id,
+    maxFrequency: +row.maxFrequency,
+    minFrequency: +row.minFrequency,
+    name: row.name,
+    notes: row.notes,
+    owner: +row.owner,
+    schedule: row.schedule as ScheduleType
+  };
+}
+
 export class TaskRepository {
   private db: IDatabase<any>;
 
@@ -24,9 +37,33 @@ export class TaskRepository {
     this.db = db;
   }
 
-  public async list(owner: number): Promise<Task[]> {
-    return this.db
-      .manyOrNone<Task>(sql.list, [owner, 10, 0])
-      .then(rows => (rows ? rows : []));
+  public async list(
+    owner: number,
+    limit?: number,
+    after?: number,
+    before?: number
+  ): Promise<Task[]> {
+    return this.db.map(sql.list, [owner, after, before, limit || 10], row =>
+      rowToTask(row)
+    );
+  }
+
+  public async listReverse(
+    owner: number,
+    limit?: number,
+    after?: number,
+    before?: number
+  ): Promise<Task[]> {
+    return this.db.map(sql.list, [owner, after, before, limit || 10], row =>
+      rowToTask(row)
+    );
+  }
+
+  public async hasNext(owner: number, after: number): Promise<boolean> {
+    return this.db.one(sql.hasNext, [owner, after]).then(row => row.r);
+  }
+
+  public async hasPrev(owner: number, before: number): Promise<boolean> {
+    return this.db.one(sql.hasPrev, [owner, before]).then(row => row.r);
   }
 }
