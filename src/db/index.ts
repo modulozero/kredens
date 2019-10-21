@@ -46,5 +46,5 @@ if (process.env.NODE_ENV !== "production") {
   import("pg-monitor").then(monitor => monitor.attach(initOptions));
 }
 
-const db: ExtendedProtocol = pgp(process.env.PG_CONNECTION_STRING);
+const db: ExtendedProtocol = pgp(process.env.DATABASE_URL);
 export { db, pgp };
