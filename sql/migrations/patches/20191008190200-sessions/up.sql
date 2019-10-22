@@ -1,6 +1,6 @@
 CREATE TABLE "sessions" (
     "sid" text NOT NULL COLLATE "default",
-	"session" json NOT NULL,
+	"session" jsonb NOT NULL,
     "expires_at" timestamptz NOT NULL,
     "created_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP

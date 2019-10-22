@@ -3,12 +3,9 @@ CREATE TABLE tasks (
     owner integer NOT NULL REFERENCES users(id),
     name text NOT NULL,
     notes text,
-    schedule task_schedule NOT NULL DEFAULT 'daily',
-    min_frequency integer,
-    max_frequency integer,
+    schedule jsonb NOT NULL DEFAULT '{}',
     created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CHECK(min_frequency IS NULL OR max_frequency IS NULL OR max_frequency > min_frequency)
+    updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TRIGGER set_tasks_updated BEFORE UPDATE ON tasks FOR EACH ROW EXECUTE PROCEDURE set_updated_timestamp();

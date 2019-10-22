@@ -14,7 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import session, { SessionOptions } from "@holdyourwaffle/express-session";
-import { server as graphqlServer } from "@kredens/api";
 import { authMiddleware } from "@kredens/auth";
 import { db } from "@kredens/db";
 import logger from "@kredens/logger";
@@ -59,10 +58,10 @@ async function main() {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   const sessionOptions: SessionOptions = {
-    resave: false,
-    saveUninitialized: false,
     secret: process.env.SECRET,
-    store: new PgStore()
+    store: new PgStore(),
+    resave: false,
+    saveUninitialized: false
   };
 
   if (app.get("env") === "production") {
@@ -73,11 +72,6 @@ async function main() {
   app.use("/bootstrap", bootstrapRouter);
 
   app.use(authMiddleware());
-  const apiServer = graphqlServer();
-  apiServer.applyMiddleware({
-    app,
-    path: "/graphql"
-  });
 
   app.use(csrf());
 
@@ -99,7 +93,7 @@ async function main() {
   const port = 3000;
   app.listen(port, () =>
     logger.info("Example app listening", {
-      uri: `http://localhost:${port}${apiServer.graphqlPath}`
+      uri: `http://localhost:${port}`
     })
   );
 }

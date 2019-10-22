@@ -19,14 +19,14 @@ import { IDatabase, IMain } from "pg-promise";
 
 function rowToTask(row: any): Task {
   return {
-    createdAt: row.created_at,
     id: +row.id,
-    maxFrequency: +row.maxFrequency,
-    minFrequency: +row.minFrequency,
+    owner: +row.owner,
     name: row.name,
     notes: row.notes,
-    owner: +row.owner,
-    schedule: row.schedule as ScheduleType
+    schedule: row.schedule as ScheduleType,
+    minFrequency: +row.minFrequency,
+    maxFrequency: +row.maxFrequency,
+    createdAt: row.created_at
   };
 }
 
