@@ -19,6 +19,8 @@ import logger from "@kredens/logger";
 import { DateTime } from "luxon";
 import { IDatabase, IMain } from "pg-promise";
 
+export class LockError extends Error {}
+
 export class MigrationRepository {
   private db: IDatabase<any>;
 
@@ -30,7 +32,19 @@ export class MigrationRepository {
     await this.db.none(sql.create);
   }
 
+  public async lock() {
+    const count = await this.db.one(sql.lock);
+    if (+count.count !== 1) {
+      throw new LockError("Failed to acquire migration lock");
+    }
+  }
+
+  public async unlock() {
+    return this.db.none(sql.unlock);
+  }
+
   public async apply() {
+    await this.lock();
     const applied = (await this.applied()).map(m => m.name);
     const toApply = sql.patches.filter(
       p => p.up.isSome() && !applied.find(o => o === p.name)
@@ -45,6 +59,7 @@ export class MigrationRepository {
         })
         .orLazy(() => Promise.resolve());
     }
+    await this.unlock();
   }
 
   public async applied(): Promise<Migration[]> {

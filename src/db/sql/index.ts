@@ -24,6 +24,8 @@ const migrations = {
   applied: sql("migrations/applied.sql"),
   apply: sql("migrations/apply.sql"),
   create: sql("migrations/create.sql"),
+  lock: sql("migrations/lock.sql"),
+  unlock: sql("migrations/unlock.sql"),
   patches: subdirs(path.join("migrations", "patches")).map(patchName => ({
     down: ifExists(
       path.join("migrations", "patches", patchName, "down.sql")

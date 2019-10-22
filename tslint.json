@@ -12,7 +12,8 @@
             "@kredens"
         ],
         "no-implicit-dependencies": [true, ["@kredens"]],
-        "object-literal-sort-keys": [true, "match-declaration-order-only", "shorthand-first"]
+        "object-literal-sort-keys": [true, "match-declaration-order-only", "shorthand-first"],
+        "max-classes-per-file": false
     },
     "rulesDirectory": []
 }
