@@ -54,8 +54,10 @@ export class TaskRepository {
     after?: number,
     before?: number
   ): Promise<Task[]> {
-    return this.db.map(sql.list, [owner, after, before, limit || 10], row =>
-      rowToTask(row)
+    return this.db.map(
+      sql.listReverse,
+      [owner, after, before, limit || 10],
+      row => rowToTask(row)
     );
   }
 
