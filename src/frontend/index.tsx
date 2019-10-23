@@ -13,7 +13,19 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-declare module "*.vue" {
-  import Vue from "vue";
-  export default Vue;
-}
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import App from "./components/App";
+import configureStore from "./store";
+
+
+const store = configureStore();
+
+const Root = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+ReactDOM.render(<Root />, document.getElementById("body"));

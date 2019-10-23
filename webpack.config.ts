@@ -1,33 +1,29 @@
 import path from "path";
-import VueLoaderPlugin from "vue-loader/lib/plugin"; // tslint:disable-line:no-implicit-dependencies
 import webpack from "webpack"; // tslint:disable-line:no-implicit-dependencies
 
 const config: webpack.Configuration = {
-  devtool: "inline-source-map",
-  entry: "./src/frontend/index.ts",
   mode: "development",
-  module: {
-    rules: [
-      {
-        exclude: /node_modules/,
-        loader: "ts-loader",
-        options: { appendTsSuffixTo: [/\.vue$/] },
-        test: /\.ts?$/
-      },
-      {
-        loader: "vue-loader",
-        test: /.vue$/
-      }
-    ]
-  },
+  entry: "./src/frontend/index.tsx",
+  devtool: "inline-source-map",
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/assets/"
   },
-  plugins: [new VueLoaderPlugin()],
+  module: {
+    rules: [
+      {
+        exclude: /node_modules/,
+        loader: "ts-loader",
+        test: /\.tsx?$/
+      }
+    ]
+  },
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts", ".tsx", ".js"],
+    alias: {
+      "@kredens": path.resolve(__dirname, "src/")
+    }
   }
 };
 

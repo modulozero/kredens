@@ -5,6 +5,8 @@
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
+    "jsx": "react",
+    "noImplicitThis": true,
     "baseUrl": "./src",
     "paths": {
       "@kredens/*": [
