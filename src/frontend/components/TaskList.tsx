@@ -1,13 +1,16 @@
 import { AppState } from "@kredens/frontend/store";
 import { deleteTask, scheduleTask } from "@kredens/frontend/store/tasks/actions";
 import { Task, TaskScheduleType } from "@kredens/frontend/store/tasks/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default () => {
   const [taskName, setTaskName] = useState("");
   const tasks = useSelector<AppState, { [key: string]: Task }>(state => state.tasks.items);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({type: "FETCH_TASKS"});
+  }, [])
 
   const onTaskAddClick = () => {
     dispatch(scheduleTask(Math.random().toString(36), {

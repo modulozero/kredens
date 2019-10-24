@@ -1,6 +1,15 @@
 {
-    "extends": "../../tslint.json",
-    "rules": {
-        "no-implicit-dependencies": [true, "dev", ["@kredens/frontend"]]
-    }
+  "extends": "../../tslint.json",
+  "rules": {
+    "no-implicit-dependencies": [
+      true,
+      "dev",
+      ["@kredens/frontend"]
+    ],
+    "no-submodule-imports": [
+      true,
+      "@kredens/frontend",
+      "redux-saga/effects"
+    ]
+  }
 }
