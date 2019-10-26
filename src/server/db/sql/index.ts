@@ -45,10 +45,7 @@ const users = {
 
 const tasks = {
   count: sql("tasks/count.sql"),
-  hasNext: sql("tasks/hasNext.sql"),
-  hasPrev: sql("tasks/hasPrev.sql"),
-  list: sql("tasks/list.sql"),
-  listReverse: sql("tasks/listReverse.sql")
+  list: sql("tasks/list.sql")
 };
 
 const sessions = {

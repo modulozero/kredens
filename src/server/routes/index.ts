@@ -14,12 +14,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import express from "express";
+import apiRouter from "./api";
 import authRouter from "./auth";
 import homeRouter from "./home";
 
 const router = express.Router({ strict: true });
 
 router.use("/auth$", authRouter);
+router.use("/api/", apiRouter);
 router.use("/*", homeRouter);
 
 export default router;

@@ -39,9 +39,7 @@ export interface Task {
   owner: number;
   name: string;
   notes?: string;
-  schedule: ScheduleType;
-  minFrequency?: number;
-  maxFrequency?: number;
+  schedule: object;
   createdAt: DateTime;
 }
 

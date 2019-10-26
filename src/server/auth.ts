@@ -40,10 +40,16 @@ export const authMiddleware: () => express.Handler = () => async (
   next();
 };
 
-export const requireAuthMiddleware: express.Handler = (req, res, next) => {
+export const requireAuthMiddleware: (redirect?: string) => express.Handler = (
+  redirect = null
+) => (req, res, next) => {
   if (!req.user) {
-    next(createHttpError(401));
+    if (redirect) {
+      res.redirect(redirect);
+    } else {
+      next(createHttpError(401));
+    }
+  } else {
+    next();
   }
-
-  next();
 };

@@ -23,9 +23,7 @@ function rowToTask(row: any): Task {
     owner: +row.owner,
     name: row.name,
     notes: row.notes,
-    schedule: row.schedule as ScheduleType,
-    minFrequency: +row.minFrequency,
-    maxFrequency: +row.maxFrequency,
+    schedule: row.schedule,
     createdAt: row.created_at
   };
 }
@@ -40,32 +38,14 @@ export class TaskRepository {
   public async list(
     owner: number,
     limit?: number,
-    after?: number,
-    before?: number
+    offset?: number
   ): Promise<Task[]> {
-    return this.db.map(sql.list, [owner, after, before, limit || 10], row =>
+    return this.db.map(sql.list, [owner, limit || 10, offset || 0], row =>
       rowToTask(row)
     );
   }
 
-  public async listReverse(
-    owner: number,
-    limit?: number,
-    after?: number,
-    before?: number
-  ): Promise<Task[]> {
-    return this.db.map(
-      sql.listReverse,
-      [owner, after, before, limit || 10],
-      row => rowToTask(row)
-    );
-  }
-
-  public async hasNext(owner: number, after: number): Promise<boolean> {
-    return this.db.one(sql.hasNext, [owner, after]).then(row => row.r);
-  }
-
-  public async hasPrev(owner: number, before: number): Promise<boolean> {
-    return this.db.one(sql.hasPrev, [owner, before]).then(row => row.r);
+  public async count(owner: number): Promise<number> {
+    return this.db.one(sql.count, [owner], row => +row.c);
   }
 }
