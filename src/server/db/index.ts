@@ -19,7 +19,7 @@ import {
   SessionRepository,
   TaskRepository,
   UserRepository
-} from "@kredens/db/repos";
+} from "@kredens/server/db/repos";
 import { DateTime } from "luxon";
 import pg from "pg";
 import pgPromise, { IDatabase, IInitOptions } from "pg-promise";

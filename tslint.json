@@ -4,14 +4,7 @@
   "jsRules": {},
   "rules": {
     "interface-name": [true, "never-prefix"],
-    "no-submodule-imports": [
-      true,
-      "graphql/language",
-      "graphql/type",
-      "vue-loader/lib/plugin",
-      "@kredens"
-    ],
-    "no-implicit-dependencies": [true, ["@kredens", "@kredens/frontend"]],
+    "no-implicit-dependencies": [true, ["@kredens"]],
     "object-literal-sort-keys": [
       true,
       "match-declaration-order-only",

@@ -2,12 +2,12 @@
   "name": "kredens",
   "version": "0.1.0",
   "description": "Where I keep my spoons",
-  "main": "src/index.ts",
+  "main": "src/server/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc --incremental ",
-    "dev": "ts-node-dev -r dotenv/config --watch src/**/*.sql -r tsconfig-paths/register --respawn --transpile-only ./src/index.ts",
-    "prod": "tsc --incremental && node ./dist/src/index.js",
+    "dev": "ts-node-dev -r dotenv/config --watch src/**/*.sql -r tsconfig-paths/register --respawn --transpile-only ./src/server/index.ts",
+    "prod": "tsc --incremental && node ./dist/src/server/index.js",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "migrate": "tsc --incremental && node ./dist/src/scripts/migrate.js"
   },

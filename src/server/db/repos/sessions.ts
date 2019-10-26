@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { Session } from "@kredens/db/models";
-import { sessions as sql } from "@kredens/db/sql";
+import { Session } from "@kredens/server/db/models";
+import { sessions as sql } from "@kredens/server/db/sql";
 import { DateTime } from "luxon";
 import { Maybe } from "monet";
 import { IDatabase, IMain } from "pg-promise";

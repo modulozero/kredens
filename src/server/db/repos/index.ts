@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { MigrationRepository } from "@kredens/db/repos/migrations";
-import { SessionRepository } from "@kredens/db/repos/sessions";
-import { TaskRepository } from "@kredens/db/repos/tasks";
-import { UserRepository } from "@kredens/db/repos/users";
+import { MigrationRepository } from "@kredens/server/db/repos/migrations";
+import { SessionRepository } from "@kredens/server/db/repos/sessions";
+import { TaskRepository } from "@kredens/server/db/repos/tasks";
+import { UserRepository } from "@kredens/server/db/repos/users";
 
 export interface Extensions {
   migrations: MigrationRepository;

@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { ScheduleType, Task } from "@kredens/db/models";
-import { tasks as sql } from "@kredens/db/sql";
+import { ScheduleType, Task } from "@kredens/server/db/models";
+import { tasks as sql } from "@kredens/server/db/sql";
 import { IDatabase, IMain } from "pg-promise";
 
 function rowToTask(row: any): Task {

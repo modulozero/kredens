@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { db } from "@kredens/db";
-import { User } from "@kredens/db/models";
+import { db } from "@kredens/server/db";
+import { User } from "@kredens/server/db/models";
 import express from "express";
 import createHttpError from "http-errors";
 import { None } from "monet";

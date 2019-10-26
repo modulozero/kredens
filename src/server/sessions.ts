@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import { Store } from "@holdyourwaffle/express-session";
-import { db } from "@kredens/db";
+import { db } from "@kredens/server/db";
 import { DateTime, Duration } from "luxon";
 
 export class PgStore extends Store {

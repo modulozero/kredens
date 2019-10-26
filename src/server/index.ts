@@ -14,12 +14,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import session, { SessionOptions } from "@holdyourwaffle/express-session";
-import { authMiddleware } from "@kredens/auth";
-import { db } from "@kredens/db";
-import logger from "@kredens/logger";
-import indexRouter from "@kredens/routes/";
-import bootstrapRouter from "@kredens/routes/bootstrap";
-import { PgStore } from "@kredens/sessions";
+import { authMiddleware } from "@kredens/server/auth";
+import { db } from "@kredens/server/db";
+import logger from "@kredens/server/logger";
+import indexRouter from "@kredens/server/routes";
+import bootstrapRouter from "@kredens/server/routes/bootstrap";
+import { PgStore } from "@kredens/server/sessions";
 import cookieParser from "cookie-parser";
 import csrf from "csurf";
 import express from "express";
@@ -44,7 +44,7 @@ async function main() {
     const webpackDevMiddleware = await import("webpack-dev-middleware").then(
       p => p.default
     );
-    const config = await import("../webpack.config").then(p => p.default);
+    const config = await import("../../webpack.config").then(p => p.default);
 
     const compiler = webpack(config);
     app.use(
