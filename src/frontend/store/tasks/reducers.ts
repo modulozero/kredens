@@ -3,6 +3,7 @@ import { TasksAction, TasksActionType, TasksState } from "./types";
 
 const initialState: TasksState = {
   items: {},
+  count: 0,
   queries: {}
 };
 

@@ -1,34 +1,38 @@
-import { DateTime } from "luxon";
+import { APIError, Task } from "./types";
 
-export interface Task {
-  id: number;
-  name: string;
-  due: DateTime;
-}
+export const getTasks = async (
+  limit: number = 10,
+  offset: number = 0
+): Promise<{ items: Task[]; count: number }> => {
+  const url = new URL("tasks", API_URL);
+  url.searchParams.set("limit", limit.toString());
+  url.searchParams.set("offset", offset.toString());
 
-const tasks: Task[] = [...Array(5).keys()].map(n => ({
-  id: n,
-  name: `Task ${n}`,
-  due: DateTime.local().plus({ weeks: n })
-}));
+  const response = await fetch(url.toString());
+  if (!response.ok) {
+    throw new APIError("Task fetch failed");
+  }
 
-export const getTasks = async (): Promise<Task[]> =>
-  new Promise<Task[]>((resolve, reject) =>
-    setTimeout(() => resolve(tasks), 3000)
-  );
+  const json = await response.json();
+  if (!Number.isSafeInteger(json.count) || !Array.isArray(json.tasks)) {
+    throw new APIError("Invalid response from server.");
+  }
+  const count: number = json.count;
+  const items: Task[] = (json.tasks as any[]).map(t => {
+    if (
+      typeof t !== "object" ||
+      !Number.isSafeInteger(t.id) ||
+      typeof t.name !== "string"
+    ) {
+      throw new APIError("Invalid response from server.");
+    }
 
-export const schedule = async (task: Omit<Task, "id">): Promise<Task> =>
-  new Promise<Task>((resolve, reject) =>
-    setTimeout(() => {
-      const id = Math.max(...tasks.map(t => t.id)) + 1;
-      tasks[id] = { ...task, id };
-      resolve(tasks[id]);
-    }, 3000)
-  );
+    return {
+      id: t.id,
+      name: t.name,
+      schedule: { type: "Plain" }
+    };
+  });
 
-export const unschedule = async (taskId: number): Promise<void> =>
-  new Promise<void>((resolve, reject) =>
-    setTimeout(() => {
-      delete tasks[taskId];
-    }, 3000)
-  );
+  return { items, count };
+};

@@ -1,5 +1,6 @@
+import { getTasks } from "@kredens/frontend/api/tasks";
+import { Task as APITask } from "@kredens/frontend/api/types";
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import { getTasks, Task as APITask } from "../api/tasks";
 import { taskFetchError, taskFetchOk, taskFetchStart } from "./tasks/actions";
 import { Task, TaskQuery, TaskScheduleType } from "./tasks/types";
 
@@ -7,22 +8,26 @@ export function* fetchTasksSaga(query: TaskQuery = { limit: 10 }) {
   yield put(taskFetchStart(query));
 
   try {
-    const tasks: APITask[] = yield call(getTasks);
+    const tasks: { items: APITask[]; count: number } = yield call(
+      getTasks,
+      query.limit,
+      query.offset
+    );
     yield put(
       taskFetchOk(
         query,
-        tasks
+        tasks.items
           .map<[string, Task]>(t => [
             t.id.toString(),
             {
               name: t.name,
               schedule: {
-                type: TaskScheduleType.Once,
-                due: t.due.toISO()
+                type: TaskScheduleType[t.schedule.type]
               }
             }
           ])
-          .reduce((res, [id, task]) => ({ ...res, [id]: task }), {})
+          .reduce((res, [id, task]) => ({ ...res, [id]: task }), {}),
+        tasks.count
       )
     );
   } catch (error) {

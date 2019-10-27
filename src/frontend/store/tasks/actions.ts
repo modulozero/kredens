@@ -26,12 +26,14 @@ export function taskFetchStart(query: TaskQuery): TasksActionType {
 
 export function taskFetchOk(
   query: TaskQuery,
-  results: { [key: string]: Task }
+  results: { [key: string]: Task },
+  count: number
 ): TasksActionType {
   return {
     type: TasksAction.TASKS_FETCH_OK,
     query,
     results,
+    count,
     fetched: DateTime.utc().toISO()
   };
 }

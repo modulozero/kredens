@@ -21,8 +21,8 @@ export interface Task {
 
 export interface TaskQuery {
   query?: string;
-  after?: string;
   limit: number;
+  offset?: number;
 }
 
 interface TaskQueryOk {
@@ -48,6 +48,7 @@ export interface TasksState {
   items: {
     [key: string]: Task;
   };
+  count: number;
   queries: {
     [key: string]: TaskQueryResult;
   };
@@ -82,6 +83,7 @@ interface TaskFetchOkAction {
   type: TasksAction.TASKS_FETCH_OK;
   query: TaskQuery;
   results: { [key: string]: Task };
+  count: number;
   fetched: string;
 }
 
