@@ -13,43 +13,43 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { box, unbox } from "@kredens/server/crypto";
-import { db } from "@kredens/server/db";
-import express from "express";
-import createHttpError from "http-errors";
-import { DateTime } from "luxon";
+import { box, unbox } from "@kredens/server/crypto"
+import createHttpError from "http-errors"
+import { DateTime } from "luxon"
+import { db } from "@kredens/server/db"
+import express from "express"
 
 interface Token {
   expires: string;
 }
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req) => {
   const token: Token = {
     expires: DateTime.local()
       .plus({ hours: 2 })
       .toISO()
-  };
-  req.log.info("Token issued", { token: box(token) });
-});
+  }
+  req.log.info("Token issued", { token: box(token) })
+})
 
 router.post("/", async (req, res, next) => {
-  const token: Token = unbox(req.body.token);
-  const expired = DateTime.fromISO(token.expires).diffNow();
+  const token: Token = unbox(req.body.token)
+  const expired = DateTime.fromISO(token.expires).diffNow()
   if (expired.as("milliseconds") < 0) {
-    next(createHttpError(401));
-    return;
+    next(createHttpError(401))
+    return
   }
 
-  const email: string = req.body.email;
-  const password: string = req.body.password;
+  const email: string = req.body.email
+  const password: string = req.body.password
 
   if (!email || !password || password.length < 8) {
-    res.send("Please provide an email and a password longer than 8 characters");
-    return;
+    res.send("Please provide an email and a password longer than 8 characters")
+    return
   }
-  await db.users.create(email, password);
-});
+  await db.users.create(email, password)
+})
 
-export default router;
+export default router

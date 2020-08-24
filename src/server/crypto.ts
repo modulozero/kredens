@@ -18,7 +18,7 @@ import {
   decodeBase64,
   decodeUTF8,
   encodeBase64,
-  encodeUTF8
+  encodeUTF8,
 } from "tweetnacl-util";
 
 const secret = decodeBase64(process.env.SECRET);

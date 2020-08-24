@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { ScheduleType, Task } from "@kredens/server/db/models";
+import { Task } from "@kredens/server/db/models";
 import { tasks as sql } from "@kredens/server/db/sql";
 import { IDatabase, IMain } from "pg-promise";
 
@@ -24,14 +24,14 @@ function rowToTask(row: any): Task {
     name: row.name,
     notes: row.notes,
     schedule: row.schedule,
-    createdAt: row.created_at
+    createdAt: row.created_at,
   };
 }
 
 export class TaskRepository {
   private db: IDatabase<any>;
 
-  constructor(db: IDatabase<any>, pgp: IMain) {
+  constructor(db: IDatabase<any>, _pgp: IMain) {
     this.db = db;
   }
 
@@ -40,12 +40,12 @@ export class TaskRepository {
     limit?: number,
     offset?: number
   ): Promise<Task[]> {
-    return this.db.map(sql.list, [owner, limit || 10, offset || 0], row =>
+    return this.db.map(sql.list, [owner, limit || 10, offset || 0], (row) =>
       rowToTask(row)
     );
   }
 
   public async count(owner: number): Promise<number> {
-    return this.db.one(sql.count, [owner], row => +row.c);
+    return this.db.one(sql.count, [owner], (row) => +row.c);
   }
 }

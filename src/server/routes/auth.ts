@@ -18,11 +18,11 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   res.render("login");
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   const userID = await db.users.login(req.body.email, req.body.password);
   if (userID.isSome()) {
     req.session.userID = userID.some();

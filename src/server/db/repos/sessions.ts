@@ -22,14 +22,14 @@ import { IDatabase, IMain } from "pg-promise";
 export class SessionRepository {
   private db: IDatabase<any>;
 
-  constructor(db: IDatabase<any>, pgp: IMain) {
+  constructor(db: IDatabase<any>, _pgp: IMain) {
     this.db = db;
   }
 
   public async all(): Promise<Session[]> {
-    return this.db.map(sql.all, [], row => ({
+    return this.db.map(sql.all, [], (row) => ({
       session: row.session,
-      sid: row.sid
+      sid: row.sid,
     }));
   }
 
@@ -42,25 +42,25 @@ export class SessionRepository {
   }
 
   public async get(sid: string): Promise<Maybe<Session>> {
-    return this.db.oneOrNone(sql.get, [sid]).then(row =>
+    return this.db.oneOrNone(sql.get, [sid]).then((row) =>
       row
         ? Maybe.Some({
             session: row.session,
-            sid: row.sid
+            sid: row.sid,
           })
         : Maybe.None()
     );
   }
 
   public async length(): Promise<number> {
-    return this.db.one(sql.length).then(row => +row.length);
+    return this.db.one(sql.length).then((row) => +row.length);
   }
 
   public async set(sid: string, session: SessionData, expiresAt: DateTime) {
     return this.db.none(sql.set, [
       sid,
       JSON.stringify(session),
-      expiresAt.toSQL()
+      expiresAt.toSQL(),
     ]);
   }
 

@@ -22,16 +22,16 @@ import { IDatabase, IMain } from "pg-promise";
 export class UserRepository {
   private db: IDatabase<any>;
 
-  constructor(db: IDatabase<any>, pgp: IMain) {
+  constructor(db: IDatabase<any>, _pgp: IMain) {
     this.db = db;
   }
 
   public async login(email: string, password: string): Promise<Maybe<number>> {
     const { id, encryptedPassword } = await this.db
       .oneOrNone(sql.login, [email])
-      .then(user => ({
+      .then((user) => ({
         encryptedPassword: user.encrypted_password,
-        id: +user.id
+        id: +user.id,
       }));
     if (id === null) {
       return None();

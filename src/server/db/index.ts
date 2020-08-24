@@ -18,7 +18,7 @@ import {
   MigrationRepository,
   SessionRepository,
   TaskRepository,
-  UserRepository
+  UserRepository,
 } from "@kredens/server/db/repos";
 import { DateTime } from "luxon";
 import pg from "pg";
@@ -31,19 +31,19 @@ types.setTypeParser(types.builtins.TIMESTAMP, DateTime.fromSQL);
 type ExtendedProtocol = IDatabase<Extensions> & Extensions;
 
 const initOptions: IInitOptions<Extensions> = {
-  extend(obj: ExtendedProtocol, dc: any) {
+  extend(obj: ExtendedProtocol) {
     obj.migrations = new MigrationRepository(obj, pgp);
     obj.tasks = new TaskRepository(obj, pgp);
     obj.users = new UserRepository(obj, pgp);
     obj.sessions = new SessionRepository(obj, pgp);
-  }
+  },
 };
 
 const pgp: pgPromise.IMain = pgPromise(initOptions);
 
 if (process.env.NODE_ENV !== "production") {
   // tslint:disable-next-line:no-implicit-dependencies
-  import("pg-monitor").then(monitor => monitor.attach(initOptions));
+  import("pg-monitor").then((monitor) => monitor.attach(initOptions));
 }
 
 const db: ExtendedProtocol = pgp(process.env.DATABASE_URL);

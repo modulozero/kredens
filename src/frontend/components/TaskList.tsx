@@ -4,7 +4,7 @@ import { Task, TaskScheduleType } from "@kredens/frontend/store/tasks/types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export default () => {
+function TaskList() {
   const [taskName, setTaskName] = useState("");
   const tasks = useSelector<AppState, { [key: string]: Task }>(state => state.tasks.items);
   const dispatch = useDispatch();
@@ -37,3 +37,5 @@ export default () => {
     </>
   );
 }
+
+export default TaskList

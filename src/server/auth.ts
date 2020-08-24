@@ -24,7 +24,7 @@ export const getUser = async (req: express.Request) =>
 
 export const authMiddleware: () => express.Handler = () => async (
   req,
-  res,
+  _res,
   next
 ) => {
   if (req.session.userID) {

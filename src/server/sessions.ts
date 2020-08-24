@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { Store } from "@holdyourwaffle/express-session";
-import { db } from "@kredens/server/db";
 import { DateTime, Duration } from "luxon";
+import { db } from "@kredens/server/db";
+import { Store } from "@holdyourwaffle/express-session";
 
 export class PgStore extends Store {
   private ttl: Duration;
@@ -30,8 +30,8 @@ export class PgStore extends Store {
   ) {
     db.sessions
       .get(sid)
-      .then(s => cb(null, s.map(ss => ss.session).orNull()))
-      .catch(r => cb(r, null));
+      .then((s) => cb(null, s.map((ss) => ss.session).orNull()))
+      .catch((r) => cb(r, null));
   }
 
   public set(sid: string, session: SessionData, cb?: (err?: any) => void) {
@@ -39,7 +39,7 @@ export class PgStore extends Store {
     const p = db.sessions.set(sid, session, expiresAt);
 
     if (cb) {
-      p.then(s => cb(null)).catch(r => cb(r));
+      p.then(() => cb(null)).catch((r) => cb(r));
     }
   }
 
@@ -47,7 +47,7 @@ export class PgStore extends Store {
     const p = db.sessions.destroy(sid);
 
     if (cb) {
-      p.then(s => cb()).catch(r => cb(r));
+      p.then(() => cb()).catch((r) => cb(r));
     }
   }
 
@@ -56,7 +56,7 @@ export class PgStore extends Store {
   ) {
     db.sessions
       .all()
-      .then(ss => {
+      .then((ss) => {
         const sessions: { [sid: string]: SessionData } = {};
 
         for (const s of ss) {
@@ -65,27 +65,27 @@ export class PgStore extends Store {
 
         cb(null, sessions);
       })
-      .catch(r => cb(r, null));
+      .catch((r) => cb(r, null));
   }
 
   public length(cb: (err: any, length: number) => void) {
     db.sessions
       .length()
-      .then(l => cb(null, l))
-      .catch(r => cb(r, 0));
+      .then((l) => cb(null, l))
+      .catch((r) => cb(r, 0));
   }
 
   public clear(cb?: (err?: any) => void) {
     const p = db.sessions.clear();
     if (cb) {
-      p.then(() => cb()).catch(r => cb(r));
+      p.then(() => cb()).catch((r) => cb(r));
     }
   }
 
   public touch(sid: string, session: SessionData, cb?: (err?: any) => void) {
     const p = db.sessions.touch(sid, this.getExpiresAt(session));
     if (cb) {
-      p.then(() => cb()).catch(r => cb(r));
+      p.then(() => cb()).catch((r) => cb(r));
     }
   }
 

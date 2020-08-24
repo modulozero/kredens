@@ -13,34 +13,34 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { requireAuthMiddleware } from "@kredens/server/auth";
-import { db } from "@kredens/server/db";
-import express from "express";
+import { db } from "@kredens/server/db"
+import express from "express"
+import { requireAuthMiddleware } from "@kredens/server/auth"
 
-const router = express.Router();
+const router = express.Router()
 
 function tryInt(v: string, def?: number): number | undefined {
   if (v) {
-    const value = parseInt(v, 10);
-    return isNaN(value) ? def : value;
+    const value = parseInt(v, 10)
+    return isNaN(value) ? def : value
   }
 
-  return def;
+  return def
 }
 
-router.use(requireAuthMiddleware());
-router.get("/tasks", async (req, res, next) => {
-  const limit = tryInt(req.query.limit, 10);
-  const offset = tryInt(req.query.offset, 0);
+router.use(requireAuthMiddleware())
+router.get("/tasks", async (req, res) => {
+  const limit = tryInt(req.query.limit, 10)
+  const offset = tryInt(req.query.offset, 0)
 
   const result = await db.tx(async tx => {
-    const tasks = await tx.tasks.list(req.user.id, limit, offset);
-    const count = await tx.tasks.count(req.user.id);
+    const tasks = await tx.tasks.list(req.user.id, limit, offset)
+    const count = await tx.tasks.count(req.user.id)
     return {
       tasks,
       count
-    };
-  });
+    }
+  })
 
   res.json({
     tasks: result.tasks.map(t => ({
@@ -51,7 +51,7 @@ router.get("/tasks", async (req, res, next) => {
       createdAt: t.createdAt.toISO
     })),
     count: result.count
-  });
-});
+  })
+})
 
-export default router;
+export default router

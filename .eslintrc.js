@@ -5,7 +5,10 @@ module.exports = {
   },
   extends: [
     "plugin:react/recommended",
-    "standard"
+    "standard",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -25,25 +28,21 @@ module.exports = {
     }
   },
   rules: {
-    "space-before-function-paren": ["error", {
-      anonymous: "always",
-      named: "never",
-      asyncArrow: "always"
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "after-used"
     }],
-    "quote-props": ["error", "consistent"],
-    "quotes": ["error", "double"],
-    "sort-imports": ["error", {
-      "ignoreCase": true,
-      "allowSeparatedGroups": true
-    }]
   },
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
       rules: {
+        "no-undef": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars-experimental": "error"
+        "@typescript-eslint/no-unused-vars-experimental": ["error", {
+          "ignoreArgsIfArgsAfterAreUsed": true
+        }]
       }
     }
   ]

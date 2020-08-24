@@ -18,7 +18,7 @@ export const getTasks = async (
     throw new APIError("Invalid response from server.");
   }
   const count: number = json.count;
-  const items: Task[] = (json.tasks as any[]).map(t => {
+  const items: Task[] = (json.tasks as any[]).map((t) => {
     if (
       typeof t !== "object" ||
       !Number.isSafeInteger(t.id) ||
@@ -30,7 +30,7 @@ export const getTasks = async (
     return {
       id: t.id,
       name: t.name,
-      schedule: { type: "Plain" }
+      schedule: { type: "Plain" },
     };
   });
 

@@ -1,5 +1,5 @@
 import path from "path";
-import webpack from "webpack"; // tslint:disable-line:no-implicit-dependencies
+import webpack from "webpack";
 
 const config: webpack.Configuration = {
   mode: "development",
@@ -8,28 +8,28 @@ const config: webpack.Configuration = {
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/assets/"
+    publicPath: "/assets/",
   },
   module: {
     rules: [
       {
         exclude: /node_modules/,
         loader: "ts-loader",
-        test: /\.tsx?$/
-      }
-    ]
+        test: /\.tsx?$/,
+      },
+    ],
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
     alias: {
-      "@kredens": path.resolve(__dirname, "src/")
-    }
+      "@kredens": path.resolve(__dirname, "src/"),
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
-      API_URL: JSON.stringify("http://localhost:3000/api/")
-    })
-  ]
+      API_URL: JSON.stringify("http://localhost:3000/api/"),
+    }),
+  ],
 };
 
 export default config;

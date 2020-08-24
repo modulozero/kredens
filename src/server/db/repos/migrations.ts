@@ -24,7 +24,7 @@ export class LockError extends Error {}
 export class MigrationRepository {
   private db: IDatabase<any>;
 
-  constructor(db: IDatabase<any>, pgp: IMain) {
+  constructor(db: IDatabase<any>, _pgp: IMain) {
     this.db = db;
   }
 
@@ -45,15 +45,15 @@ export class MigrationRepository {
 
   public async apply() {
     await this.lock();
-    const applied = (await this.applied()).map(m => m.name);
+    const applied = (await this.applied()).map((m) => m.name);
     const toApply = sql.patches.filter(
-      p => p.up.isSome() && !applied.find(o => o === p.name)
+      (p) => p.up.isSome() && !applied.find((o) => o === p.name)
     );
 
     for (const patch of toApply) {
       logger.info("Applying migration", { name: patch.name });
       await patch.up
-        .map(async qf => {
+        .map(async (qf) => {
           await this.db.none(qf);
           await this.db.none(sql.apply, [patch.name]);
         })
@@ -63,10 +63,10 @@ export class MigrationRepository {
   }
 
   public async applied(): Promise<Migration[]> {
-    return this.db.map(sql.applied, [], row => ({
+    return this.db.map(sql.applied, [], (row) => ({
       appliedAt: row.applied_at as DateTime,
       id: +row.id,
-      name: row.name
+      name: row.name,
     }));
   }
 }
