@@ -1,0 +1,8 @@
+{
+    "python.defaultInterpreterPath": "/home/vscode/.cache/pypoetry/virtualenvs/kredens-jonBWTvO-py3.12/bin/python",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    }
+}
