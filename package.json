@@ -26,7 +26,7 @@
     "express-pino-logger": "^4.0.0",
     "helmet": "^3.22.0",
     "http-errors": "^1.7.3",
-    "luxon": "^1.22.2",
+    "luxon": "^1.28.1",
     "monet": "^0.9.1",
     "pg": "^7.18.2",
     "pg-promise": "^9.3.6",
