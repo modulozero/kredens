@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "kredens",
+			"path": "."
+		},
+		{
+			"name": "kredens-backend",
+			"path": "kredens-backend"
+		}
+	],
+	"settings": {}
+}
